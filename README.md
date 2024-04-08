@@ -1,4 +1,8 @@
-# Upbot
+<p align="center">
+  <img src="/docs/tg.png" alt="Login Interface Preview">
+</p>
+
+# UpWorkBot
 **UpWork RSS to Telegram**
 
 A simple bot that parses the UpWork RSS feed and sends new messages to Telegram. By default, the parsing frequency is set to 1 minute. All descriptions are summarized through ChatGPT to reduce reading unnecessary information. There are also two buttons to read the post in translation and in the original. The query request is set through environment variables and uses Python by default.
