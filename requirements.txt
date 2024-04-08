@@ -1,0 +1,9 @@
+aiogram
+aiohttp
+requests
+pydantic
+pydantic_settings
+requests
+beautifulsoup4
+lxml
+loguru
