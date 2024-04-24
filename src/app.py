@@ -38,8 +38,12 @@ class App:
         '''Run cycle every {cfg.parse_timeout} seconds'''
         while True:
             try:
-                parse_time = await self._run_cycle(session)
-                logger.info(f"Parsed for {parse_time} secs")
+                print(f"{cfg.started=}")
+                if cfg.started:
+                    parse_time = await self._run_cycle(session)
+                    logger.info(f"Parsed for {parse_time} secs")
+                else:
+                    parse_time = 0
 
                 if (to_sleep := cfg.parse_timeout - parse_time) > 0:
                     logger.info(f"Sleeping for {to_sleep}")

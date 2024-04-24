@@ -1,11 +1,12 @@
 import asyncio
-
 from aiogram import Bot, Dispatcher, types
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
 from aiogram.types import (
     InlineKeyboardMarkup as Keyboard,
     InlineKeyboardButton as KeyBtn,
+    ReplyKeyboardMarkup,
+    KeyboardButton,
 )
 
 from logger import logger
@@ -56,7 +57,48 @@ class TeleBot:
         user = message.from_user
         cfg.add_user_id(user.id)
         logger.info(f"User {user.username} started the conversation.\n{user}")
-        await message.reply("Hello! Welcome to the Upwork bot.")
+        await message.reply(
+            "Hello! Welcome to the Upwork bot.",
+            **TeleBot.get_admin_kwargs(user)
+        )
+
+    @staticmethod
+    def get_admin_kwargs(user):
+        if user.id != cfg.admin_id:
+            return {}
+
+        text = f"/{'stop' if cfg.started else 'start'}_bot"
+        return {
+            "reply_markup": ReplyKeyboardMarkup(
+                resize_keyboard=True,
+                one_time_keyboard=True,
+                keyboard=[[KeyboardButton(text=text)]],
+            )
+        }
+
+    @staticmethod
+    @dispatcher.message()
+    async def _admin_handler(message: types.Message):
+        user = message.from_user
+        text = message.text.strip()
+        if user.id != cfg.admin_id or not text.startswith("/"):
+            return
+
+        match text:
+            case "/stop_bot":
+                cfg.started = False
+                await message.reply(
+                    "Bot stopped",
+                    **TeleBot.get_admin_kwargs(user)
+                )
+            case "/start_bot":
+                cfg.started = True
+                await message.reply(
+                    "Bot started",
+                    **TeleBot.get_admin_kwargs(user)
+                )
+            case _:
+                await message.reply("Command not found")
 
     async def send_message(self, job: Job):
         logger.info(f"  - Sending '{job.title}'")

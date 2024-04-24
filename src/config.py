@@ -14,10 +14,12 @@ class Config(BaseSettings):
     request_attempts: int = 3
     upwork_query: str = "python"
     target_language: str = "english"
+    started: bool = False
 
     chat_ids_file: Path = Path().resolve().parent / "data" / "chat_ids.json"
     jobs_file: Path = Path().resolve().parent / "data" / "jobs.pickle"
     chat_ids: list[int | str] = []
+    admin_id: int
 
     upwork_bot_token: str
     openai_key: str
