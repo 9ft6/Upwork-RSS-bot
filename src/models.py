@@ -13,6 +13,7 @@ class Job(BaseModel):
     description: str
     content: str | None = Field(None, alias='content:encoded')
     time: str
+    date: datetime
     id: str | None = None
 
     money: str | None
@@ -41,7 +42,8 @@ class Job(BaseModel):
                 money=cls.parse_money(item),
                 country=cls.parse_country(item),
                 skills=cls.parse_skills(item),
-                time=cls.parse_date(item),
+                time=cls.parse_time(item),
+                date=cls.parse_date(item),
                 category=cls.parse_category(item),
             )
         except Exception as e:
@@ -57,7 +59,11 @@ class Job(BaseModel):
         return datetime.strptime(
             item.find('pubDate').text,
             "%a, %d %b %Y %H:%M:%S %z"
-        ).ctime()[4:-5]
+        )
+
+    @classmethod
+    def parse_time(cls, item: str):
+        return cls.parse_date(item).ctime()[4:-5]
 
     @classmethod
     def parse_money(cls, item: str):

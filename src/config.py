@@ -14,7 +14,7 @@ class Config(BaseSettings):
     request_attempts: int = 3
     upwork_query: str = "python"
     target_language: str = "english"
-    started: bool = False
+    started: bool = True
 
     chat_ids_file: Path = Path().resolve().parent / "data" / "chat_ids.json"
     jobs_file: Path = Path().resolve().parent / "data" / "jobs.pickle"
